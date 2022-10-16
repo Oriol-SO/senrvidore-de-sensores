@@ -246,7 +246,6 @@ import mqtt from 'mqtt'
     name: 'HelloWorld',
     data(){
       return{
-        //connection: new WebSocket('ws://192.168.101.109:81/'),
         client: mqtt.connect("ws://broker.emqx.io:8083/mqtt"),
         estado_boton: 0, 
         temperatura:23,

@@ -198,7 +198,7 @@
                     <v-card elevation="0" style="text-align:center;" > 
                             <v-avatar
                             class="mt-7 mb-15"
-                              v-if="estado_boton"
+                              v-if="estado_boton=='1'"
                               color="primary"
                               size="40"
                               style="-moz-box-shadow: 0px 2px 25px 24px #1976d2;
@@ -247,7 +247,7 @@ import mqtt from 'mqtt'
     data(){
       return{
         client: mqtt.connect("ws://broker.emqx.io:8083/mqtt"),
-        estado_boton: 0, 
+        estado_boton: '0', 
         temperatura:23,
         humedad:37,
         limite:'',

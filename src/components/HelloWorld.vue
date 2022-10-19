@@ -241,7 +241,9 @@
 </template>
 
 <script>
-import mqtt from 'mqtt'
+import mqtt from 'mqtt';
+//import AWSMqtt from "aws-mqtt-client";
+
   export default {
     name: 'HelloWorld',
     data(){
@@ -262,10 +264,28 @@ import mqtt from 'mqtt'
           qos: 0,
           payload: '0',
         },
+       message:'hoal mundo',
+      /*  mqttClient: new AWSMqtt({
+          accessKeyId: 'AKIAWDM7XSAU47TFQ77I',
+          secretAccessKey: "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",
+          sessionToken: "IQoJb3JpZ2luX2VjEF8aCXVzLWVhc3QtMSJGMEQCIDmlveJzmP9tmsYemndukpyWd+ESZ0pOOiJGyARO1MD8AiA9fth2rcTSZjlAbZni3xe8kDNImQopzcJXWFPFGn2/5yrTAQg4EAAaDDQxOTYzMTE3MzY3MyIMEupk4QN5kscf8SERKrABfArUyES+1zLJrZtgpRL3khPzQcqxgzd/saUTNXbZaJ/CB/LaSlGRYbpA/KLc0/BMELvL9r3nV+VRhPJBibhtbO28PSG91bWbDAJ9nXYNC80S827IdWDVPhvwFEybxzicp33wcn6Mm4Yv3zpgvD0DIv7TB4OPd/ccfy5W1TqaMcTleADtHAafNtWfRVdIV4ItM6BlTGBSqjrZWCwcpTtTXMU0w4OcUeFUIIocJG6Jw7wwgtS8mgY6mQEze9Fx0mwC85piygudrVNA64QPU/idwrB9O0PN4HkE7K2f14kKFVTamtAsZl8lA+z5SAGJc9CL90pov+CktBAyLNb6CjS/U6RPsqLiPzbCPdHYvfiP4nEP2eLzPE+nTFJ3uP6Cb0h7QcwKXIUxtZwHbRmjEpqfunb+rFeFp2b4auyEefM6zoJNK2IVcLAfjbtqXz3zbw456yo=",
+          endpointAddress:'a254tpp5iuql2p.iot.us-west-2.amazonaws.com',
+          region: "us-west-2"
+        }),*/
     }
       
     },mounted(){
+/*
+      this.mqttClient.on("connect", () => {
+        this.mqttClient.subscribe("sensor");
+        console.log("connected to iot mqtt websocket");
+      });
 
+      this.mqttClient.on("message", (topic,message) => {
+        console.log(message.toString());
+      });
+
+      this.mqttClient.publish('sensor', this.message);*/
     /*db.collection("tension").doc('Cp1EZMP8tdMUpG0AZBTZ')
     .onSnapshot((doc) => {
         var dato=doc.data();
@@ -276,7 +296,7 @@ import mqtt from 'mqtt'
     });*/
     //this.audio();
 
-       this.client.on('connect', ()=>{
+      this.client.on('connect', ()=>{
       console.log('conectado')
       this.client.subscribe('oriolport/01',(err)=> {
         if (!err) {

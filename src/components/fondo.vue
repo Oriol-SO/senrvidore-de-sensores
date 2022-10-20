@@ -70,10 +70,15 @@ export default {
 }
 .card1 {
         box-shadow: 0px 3px 3px -2px rgb(26 153 148 / 20%), 0px 3px 4px 0px rgb(12 96 48 / 14%), 0px 1px 8px 0px rgb(6 167 89 / 12%) !important;
+        /* fallback for old browsers */
+        background: linear-gradient(to top, #030e16, #0b2f37); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
 }
 
 .colorletra{
     color: #717b82;
+    font-weight: 700;
 }
 #circulotemp{
     margin: auto;

@@ -14,7 +14,7 @@
                             <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#f9f82dfc">mdi-thermometer</v-icon>
                         </v-card-title>
                         <v-card elevation="0" class="transparent d-flex" height="240" >
-                            <strong style="color:#f9ba2dfc" class="color_numero">24 °C</strong>   
+                            <strong style="color:#e9701afc" class="color_numero">{{temperatura}}°C</strong>   
                         </v-card>
                     </v-card>
                 </v-col>
@@ -27,14 +27,26 @@
                             </v-icon>
                         </v-card-title>
                            <v-card elevation="0" class="transparent d-flex" height="240">
-                                 <v-progress-circular :value="100" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
-                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">24 %</strong>
+                                 <v-progress-circular :value="humedad" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
+                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">{{humedad}} %</strong>
                                 </v-progress-circular>
                             </v-card>
                     </v-card>
                 </v-col>
                 <v-col cols="12" sm="4">
-
+                    <v-card class="transparent card1"  >
+                        <v-card-title class="colorletra" style="position:relative; width:100%;">
+                            Humedad de suelo
+                            <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#2df997fc">
+                                mdi-water-outline
+                            </v-icon>
+                        </v-card-title>
+                           <v-card elevation="0" class="transparent d-flex" height="240">
+                                 <v-progress-circular :value="humedad" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
+                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">{{humedad}} %</strong>
+                                </v-progress-circular>
+                            </v-card>
+                    </v-card>
                 </v-col>
             </v-row>
         </v-card>
@@ -46,6 +58,8 @@ export default {
     name:'fondo',
     data(){
         return{
+            humedad:35,
+            temperatura:35,
         }
     }
 }

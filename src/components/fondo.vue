@@ -49,13 +49,13 @@
                                     </v-icon >
                                     <div v-if="lluvia" style="text-align: center;">
                                         <v-icon  dark  size="50" color="#1cc3c3">
-                                            mdi-water-outline
+                                            mdi-water
                                         </v-icon>
                                         <v-icon  dark  size="50" class="mt-7"  color="#1cc3c3">
-                                            mdi-water-outline
+                                            mdi-water
                                         </v-icon>
                                         <v-icon  dark  size="50" color="#1cc3c3">
-                                            mdi-water-outline
+                                            mdi-water
                                         </v-icon>
                                     </div>
                                 </div> 

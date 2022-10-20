@@ -64,48 +64,133 @@
                             </v-card>
                     </v-card>
                 </v-col>
-                <v-col cols="12" sm="3">
-                    <v-card class="transparent card1" >
+                <v-col cols="12" sm="5">
+                    <v-card class="mb-3 card2" >
                         <v-card-title class="colorletra" style="position:relative; width:100%;">
-                            Horario
+                            Hora
                             <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#ef476f">mdi-clock</v-icon>
                         </v-card-title>
-                        <v-card elevation="0" class="transparent d-flex" height="240" >
+                        <v-card elevation="0" class="transparent d-flex" height="140" >
                             <div class="container">
                                 <div class="reloj">
-                                    {{hora}}:{{minutos}}:{{segundos}}
-                                </div>
-                                <div class="date">
-                                    {{dia}} {{mes}} 
+                                    {{hora}}:{{minutos}} PM
                                 </div>
                             </div>   
                         </v-card>
                     </v-card>
-                </v-col>
-                <v-col cols="12" sm="3">
-                    <v-card class="transparent card1" >
+                    <v-card class=" card3" >
                         <v-card-title class="colorletra" style="position:relative; width:100%;">
                             Estación
-                            <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#6665dd">mdi-sun-snowflake</v-icon>
                         </v-card-title>
-                        <v-card elevation="0" class="transparent d-flex" height="240" >
+                        <v-card elevation="0" class="transparent d-flex" height="140" >
                             <div class="estacion">
-                                <div class="verano" onclick="">
-                                    <v-icon dark style="right:0;  top:5px" size="100" color="#fff76e"> mdi-white-balance-sunny</v-icon>
+                                <div>
+                                    <div v-if="estacion==1" class="verano" onclick="">
+                                        <v-icon dark style="right:0;  top:5px" size="80" color="#fff76e"> mdi-white-balance-sunny</v-icon>  
+                                    </div>
+                                    <div v-else-if="estacion==2" class="invierno">
+                                        <v-icon dark style="right:0;  top:5px" size="80" color="#118ab2">mdi-snowflake</v-icon>
+                                        
+                                    </div> 
+                                    <div v-else-if="estacion==3" class="primavera">
+                                        <v-icon dark style="right:0;  top:5px" size="80" color="#ef476f">mdi-flower</v-icon>
+                                        
+                                    </div>
+                                    <div v-else-if="estacion==4" class="otoño">
+                                        <v-icon dark style="right:0;  top:5px" size="80" color="#e9701afc">mdi-seed</v-icon>
+                                        
+                                    </div>
+                                   
                                 </div>
-                                <div class="invierno">
-                                    <v-icon dark style="right:0;  top:5px" size="100" color="#118ab2">mdi-snowflake</v-icon>
-                                </div> 
-                                <div class="primavera">
-                                    <v-icon dark style="right:0;  top:5px" size="100" color="#ef476f">mdi-flower</v-icon>
-                                </div>
-                                <div class="otoño">
-                                    <v-icon dark style="right:0;  top:5px" size="100" color="#e9701afc">mdi-seed</v-icon>
-                                </div>
+                             
                             </div>  
+                                <div class="date">
+                                    {{dia}} de  {{mes}} <br>
+                                    {{nombreest}}
+                                </div>
                         </v-card>
                     </v-card>
                 </v-col>
+                
+                <v-col cols="1" >
+                      <strong style="color:#fff;">Resumen de datos</strong> 
+                      <v-alert
+                      class="mt-4"
+                        border="bottom"
+                        color="#e9701afc"
+                        dense
+                        loading
+                       style="color:#fff !important;"
+                      >
+                        Temperatura 24°C
+                        <v-progress-linear
+                        indeterminate
+                        color="white"
+                        ></v-progress-linear>
+                      </v-alert>
+                      <v-alert
+                        border="bottom"
+                        color="#2df997fc"
+                        dense
+                        style="color:#fff !important;"
+                      >
+                       Humedad 77%
+                        <v-progress-linear
+                        indeterminate
+                        color="white"
+                        ></v-progress-linear>
+                      </v-alert>
+                      <v-alert
+                        border="bottom"
+                        color="#1cc3c3"
+                        dense
+                     style="color:#fff !important;"
+                      >
+                       Con lluvia
+                        <v-progress-linear
+                        indeterminate
+                        color="white"
+                        ></v-progress-linear>
+                      </v-alert>
+                      <v-alert
+                        border="bottom"
+                        color="#ef476f"
+                        dense
+                        style="color:#fff !important;"
+                      >
+                         Hora
+                        2:00 pm
+                         <v-progress-linear
+                        indeterminate
+                        color="white"
+                        ></v-progress-linear>
+                      </v-alert>
+                      <v-alert
+                        border="bottom"
+                        color="purple"
+                        dense
+                        style="color:#fff !important;"
+                      >
+                        Verano
+                         <v-progress-linear
+                        indeterminate
+                        color="white"
+                        ></v-progress-linear>
+                      </v-alert>
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                    <v-card class="transparent">
+                        <div 
+                        class="ma-auto contenedorimg"
+                        >
+                        <img
+                        v-bind:style="estado_motor==1?'animation: rotation 1s infinite linear;':''"
+                        src="https://icones.pro/wp-content/uploads/2022/02/services-parametres-et-icone-d-engrenage-orange.png" alt="">
+                        </div>
+                    </v-card>
+                </v-col>
+               
             </v-row>
         </v-card>
     </div>
@@ -123,8 +208,11 @@ export default {
             minutos: 35,
             segundos: 59,
             dia: 20,
-            mes: "octubre",
+            mes: "Octubre",
             verano: 1,
+            estacion:4,
+            nombreest:'Verano',
+            estado_motor:1,
         }
     },
 
@@ -142,6 +230,7 @@ export default {
     background: #030e16;
     height: 100%;
     font-family: 'Open Sans';
+    font-weight: 700;
 }
 
 .transparent{
@@ -190,7 +279,7 @@ export default {
 
 .date{
     display: flex;
-    font-size: 35px;
+    font-size: 25px;
     color: white;
     font-family: "Open Sans";
 }
@@ -199,7 +288,35 @@ export default {
     display: flex;
     justify-content: center;
     align-content: center;
-    width: 100%;
+    width: 60%;
+}
+.card2{
+    background-color: #00243c !important;
+    /*box-shadow: 0px 3px 3px -2px rgb(26 153 148 / 20%), 0px 3px 4px 0px rgb(12 96 48 / 14%), 0px 1px 8px 0px rgb(6 167 89 / 12%) !important;*/
 }
 
+.card3{
+     background-color:#13152c !important;
+}
+
+.contenedorimg{
+     text-align: center !important;
+}
+
+.contenedorimg img{
+  max-height: 50%;
+  max-width: 70%;
+ 
+}
+.rotate {
+  animation: rotation 1s infinite linear;
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 </style>

@@ -2,7 +2,43 @@
     <div class="fondo">
     <v-card class="transparent" elevation="0">
         <v-card-title style="color:#bdc2c5; font-size:30px" >
-          <v-icon style="color:#bdc2c5; font-size:30px" dark class="mr-2" >mdi-view-dashboard</v-icon> Control de Sensores 
+          <v-icon style="color:#bdc2c5; font-size:30px" dark class="mr-2" @click="dialog=true">mdi-view-dashboard</v-icon> Control de Sensores
+          <v-menu 
+            transition="slide-x-transition"
+            bottom
+            right
+            v-model="dialog"
+            
+            :close-on-content-click="false"
+            
+            >
+            <v-list width="350" style="background:#031119" dark>
+                <v-list-item>
+                    <v-list-item-title>
+                        Controles del sistema
+                    </v-list-item-title>
+                </v-list-item>
+       
+                <v-list-item
+      
+                >
+                <v-list-item-title>
+                     <v-icon>mdi-cog-off</v-icon>Sistema  
+                     
+                </v-list-item-title>
+                <v-switch v-model="sistema" @click="estado_sistema()" class="ml-4" color="#03fda1"></v-switch>
+                </v-list-item>
+
+                <v-list-item
+                >
+                <v-list-item-title>
+                     <v-icon>mdi-led-on</v-icon> Led
+                </v-list-item-title>
+                    <v-switch v-model="led" @click="prenderled()" class="ml-4"  color="#01c4ff"></v-switch>
+                </v-list-item>
+
+            </v-list>
+            </v-menu> 
         </v-card-title>
     </v-card>
         <v-card class="mx-3 mt-2 transparent" elevation="0" >
@@ -27,8 +63,8 @@
                             </v-icon>
                         </v-card-title>
                            <v-card elevation="0" class="transparent d-flex" height="240">
-                                 <v-progress-circular :value="humedad" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
-                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">{{humedad}} %</strong>
+                                 <v-progress-circular :value="hume" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
+                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">{{hume}} %</strong>
                                 </v-progress-circular>
                             </v-card>
                     </v-card>
@@ -122,8 +158,9 @@
                         loading
                        style="color:#fff !important;"
                       >
-                        Temperatura 24°C
+                        Temperatura <br> 24°C
                         <v-progress-linear
+                        v-if="sistema"
                         indeterminate
                         color="white"
                         ></v-progress-linear>
@@ -134,8 +171,9 @@
                         dense
                         style="color:#fff !important;"
                       >
-                       Humedad 77%
+                       Humedad <br> {{hume}}%
                         <v-progress-linear
+                        v-if="sistema"
                         indeterminate
                         color="white"
                         ></v-progress-linear>
@@ -148,6 +186,7 @@
                       >
                        Con lluvia
                         <v-progress-linear
+                        v-if="sistema"
                         indeterminate
                         color="white"
                         ></v-progress-linear>
@@ -158,9 +197,10 @@
                         dense
                         style="color:#fff !important;"
                       >
-                         Hora
+                         Hora <br>
                         2:00 pm
                          <v-progress-linear
+                         v-if="sistema"
                         indeterminate
                         color="white"
                         ></v-progress-linear>
@@ -173,6 +213,7 @@
                       >
                         Verano
                          <v-progress-linear
+                        v-if="sistema"
                         indeterminate
                         color="white"
                         ></v-progress-linear>
@@ -197,13 +238,18 @@
 </template>
 
 <script>
+import mqtt from 'mqtt';
 export default {
     name:'fondo',
     data(){
         return{
-            humedad:75,
-            temperatura:35,
-            lluvia:1,
+            dialog:false,
+            sistema:true,
+            led:0,
+            client: mqtt.connect("ws://broker.emqx.io:8083/mqtt"),
+            humedad:0,
+            temperatura:0,
+            lluvia:0,
             hora: 12,
             minutos: 35,
             segundos: 59,
@@ -214,7 +260,50 @@ export default {
             nombreest:'Verano',
             estado_motor:1,
         }
-    },
+    },computed:{
+        hume(){
+            return Math.round(((this.humedad*100)/4095));
+        }
+    },    
+    mounted(){
+            this.client.on('connect', ()=>{
+            console.log('conectado')
+            this.client.subscribe('oriolport/01',(err)=> {
+                if (!err) {
+                this.client.publish('oriolport/02', '0')
+                }
+            })
+            })
+            this.client.on('message',(topic, message)=>{
+                // message is Buffer
+                if(topic=='oriolport/01' && this.sistema){
+                    //console.log(message.toString())
+                    let js=message.toString();
+                    let cadena=JSON.parse(js);
+                    console.log(cadena)
+                    this.humedad=cadena.hume;
+                    this.lluvia=cadena.lluvia;
+                    this.temperatura=cadena.temp;
+                    this.estado_motor=1;
+                }else{
+                    this.humedad=0;
+                    this.lluvia=0;
+                    this.temperatura=0;
+                    this.estado_motor=0;
+                }
+            })
+    },methods:{
+        prenderled(){
+            let l=this.led?'1':'0';
+              this.client.publish('oriolport/02', l)
+        },
+        estado_sistema(){
+            let s=this.sistema?'1':'0';
+            if(s=='0'){
+              this.client.publish('oriolport/03', s)
+            }
+        }
+    }
 
 }
 </script>

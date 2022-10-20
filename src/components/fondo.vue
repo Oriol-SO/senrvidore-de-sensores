@@ -36,15 +36,31 @@
                 <v-col cols="12" sm="4">
                     <v-card class="transparent card1"  >
                         <v-card-title class="colorletra" style="position:relative; width:100%;">
-                            Humedad de suelo
-                            <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#2df997fc">
-                                mdi-water-outline
-                            </v-icon>
+                            Lluvia
+                            <div>
+
+                            </div>
+   
                         </v-card-title>
-                           <v-card elevation="0" class="transparent d-flex" height="240">
-                                 <v-progress-circular :value="humedad" size="220" class="mx-auto mb-4" color="rgba(38, 233, 139, 0.625) ">
-                                    <strong color="rgba(38, 233, 139, 0.625)" style="font-size:55px">{{humedad}} %</strong>
-                                </v-progress-circular>
+                           <v-card elevation="0" class="transparent d-flex" height="240">   
+                                <div class="mx-auto">
+                                    <v-icon dark class="my-auto mx-auto" size="150" color="#1cc3c3">
+                                        mdi-cloud-outline
+                                    </v-icon >
+                                    <div v-if="lluvia" style="text-align: center;">
+                                        <v-icon  dark  size="50" color="#1cc3c3">
+                                            mdi-water-outline
+                                        </v-icon>
+                                        <v-icon  dark  size="50" class="mt-7"  color="#1cc3c3">
+                                            mdi-water-outline
+                                        </v-icon>
+                                        <v-icon  dark  size="50" color="#1cc3c3">
+                                            mdi-water-outline
+                                        </v-icon>
+                                    </div>
+                                </div> 
+                               
+                                
                             </v-card>
                     </v-card>
                 </v-col>
@@ -60,6 +76,7 @@ export default {
         return{
             humedad:35,
             temperatura:35,
+            lluvia:1,
         }
     }
 }
@@ -74,7 +91,7 @@ export default {
 }
 .fondo{
     background: #030e16;
-    height: 100vh;
+    height: 100%;
     font-family: 'Open Sans';
 }
 
@@ -84,10 +101,7 @@ export default {
 }
 .card1 {
         box-shadow: 0px 3px 3px -2px rgb(26 153 148 / 20%), 0px 3px 4px 0px rgb(12 96 48 / 14%), 0px 1px 8px 0px rgb(6 167 89 / 12%) !important;
-        /* fallback for old browsers */
-        background: linear-gradient(to top, #030e16, #0b2f37); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-
+        background: linear-gradient(to top, #030e16, #0b2f37);
 }
 
 .colorletra{

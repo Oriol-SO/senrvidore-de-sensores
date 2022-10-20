@@ -64,6 +64,48 @@
                             </v-card>
                     </v-card>
                 </v-col>
+                <v-col cols="12" sm="3">
+                    <v-card class="transparent card1" >
+                        <v-card-title class="colorletra" style="position:relative; width:100%;">
+                            Horario
+                            <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#ef476f">mdi-clock</v-icon>
+                        </v-card-title>
+                        <v-card elevation="0" class="transparent d-flex" height="240" >
+                            <div class="container">
+                                <div class="reloj">
+                                    {{hora}}:{{minutos}}:{{segundos}}
+                                </div>
+                                <div class="date">
+                                    {{dia}} {{mes}} 
+                                </div>
+                            </div>   
+                        </v-card>
+                    </v-card>
+                </v-col>
+                <v-col cols="12" sm="3">
+                    <v-card class="transparent card1" >
+                        <v-card-title class="colorletra" style="position:relative; width:100%;">
+                            Estación
+                            <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#6665dd">mdi-sun-snowflake</v-icon>
+                        </v-card-title>
+                        <v-card elevation="0" class="transparent d-flex" height="240" >
+                            <div class="estacion">
+                                <div class="verano" onclick="">
+                                    <v-icon dark style="right:0;  top:5px" size="100" color="#fff76e"> mdi-white-balance-sunny</v-icon>
+                                </div>
+                                <div class="invierno">
+                                    <v-icon dark style="right:0;  top:5px" size="100" color="#118ab2">mdi-snowflake</v-icon>
+                                </div> 
+                                <div class="primavera">
+                                    <v-icon dark style="right:0;  top:5px" size="100" color="#ef476f">mdi-flower</v-icon>
+                                </div>
+                                <div class="otoño">
+                                    <v-icon dark style="right:0;  top:5px" size="100" color="#e9701afc">mdi-seed</v-icon>
+                                </div>
+                            </div>  
+                        </v-card>
+                    </v-card>
+                </v-col>
             </v-row>
         </v-card>
     </div>
@@ -74,11 +116,18 @@ export default {
     name:'fondo',
     data(){
         return{
-            humedad:35,
+            humedad:75,
             temperatura:35,
             lluvia:1,
+            hora: 12,
+            minutos: 35,
+            segundos: 59,
+            dia: 20,
+            mes: "octubre",
+            verano: 1,
         }
-    }
+    },
+
 }
 </script>
 
@@ -106,7 +155,8 @@ export default {
 
 .colorletra{
     color: #717b82;
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 25px
 }
 #circulotemp{
     margin: auto;
@@ -122,4 +172,34 @@ export default {
     margin: auto;
     font-size: 85px;
 }
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+
+}
+
+.reloj{
+  display: flex;
+  font-size: 70px;
+  color: white;
+  font-family: "Open Sans";
+}
+
+.date{
+    display: flex;
+    font-size: 35px;
+    color: white;
+    font-family: "Open Sans";
+}
+
+.estacion{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+
 </style>

@@ -1,4 +1,4 @@
-<template>
+<!--template>
   <v-container>
     <v-main class="">
           <v-container >
@@ -238,7 +238,7 @@
      
     </v-main>
   </v-container>
-</template>
+</template-->
 
 <script>
 import mqtt from 'mqtt';

@@ -73,10 +73,6 @@
                     <v-card class="transparent card1"  >
                         <v-card-title class="colorletra" style="position:relative; width:100%;">
                             Lluvia
-                            <div>
-
-                            </div>
-   
                         </v-card-title>
                            <v-card elevation="0" class="transparent d-flex" height="240">   
                                 <div class="mx-auto">
@@ -84,13 +80,13 @@
                                         mdi-cloud-outline
                                     </v-icon >
                                     <div v-if="lluvia" style="text-align: center;">
-                                        <v-icon  dark  size="50" color="#1cc3c3">
+                                        <v-icon  dark  size="50" color="#1cc3c3" style="animation: nieve 2s ease-in-out infinite;">
                                             mdi-water
                                         </v-icon>
-                                        <v-icon  dark  size="50" class="mt-7"  color="#1cc3c3">
+                                        <v-icon  dark  size="50" class="mt-7"  color="#1cc3c3" style="animation: nieve 2s ease-in-out infinite;">
                                             mdi-water
                                         </v-icon>
-                                        <v-icon  dark  size="50" color="#1cc3c3">
+                                        <v-icon  dark  size="50" color="#1cc3c3" style="animation: nieve 2s ease-in-out infinite;">
                                             mdi-water
                                         </v-icon>
                                     </div>
@@ -120,20 +116,19 @@
                         </v-card-title>
                         <v-card elevation="0" class="transparent d-flex" height="140" >
                             <div class="estacion">
-                                <div>
-                                    <div v-if="estacion==1" class="verano" onclick="">
-                                        <v-icon dark style="right:0;  top:5px" size="80" color="#fff76e"> mdi-white-balance-sunny</v-icon>  
+                                <div >
+                                    <div v-if="estacion==1" class="verano" style="animation: rotation 3.5s infinite linear;">
+                                        <v-icon dark style="right:0;  top:5px" size="130" color="#fff76e"> mdi-white-balance-sunny</v-icon>  
                                     </div>
-                                    <div v-else-if="estacion==2" class="invierno">
-                                        <v-icon dark style="right:0;  top:5px" size="80" color="#118ab2">mdi-snowflake</v-icon>
-                                        
+                                    <div v-else-if="estacion==2" class="invierno" style="animation: nieve 2s ease-in-out infinite;">
+                                        <v-icon dark style="right:0;  top:5px" size="130" color="#118ab2">mdi-snowflake</v-icon>
                                     </div> 
-                                    <div v-else-if="estacion==3" class="primavera">
-                                        <v-icon dark style="right:0;  top:5px" size="80" color="#ef476f">mdi-flower</v-icon>
+                                    <div v-else-if="estacion==3" class="primavera" style="">
+                                        <v-icon dark style="right:0;  top:5px" size="130" color="#ef476f">mdi-flower</v-icon>
                                         
                                     </div>
-                                    <div v-else-if="estacion==4" class="otoño">
-                                        <v-icon dark style="right:0;  top:5px" size="80" color="#e9701afc">mdi-seed</v-icon>
+                                    <div v-else-if="estacion==4" class="otoño" style="animation: otoño 3.5s ease-in-out infinite;">
+                                        <v-icon dark style="right:0;  top:5px" size="130" color="#e9701afc">mdi-seed</v-icon>
                                         
                                     </div>
                                    
@@ -158,7 +153,7 @@
                         loading
                        style="color:#fff !important;"
                       >
-                        Temperatura <br> 24°C
+                        Temperatura {{temperatura}}°C
                         <v-progress-linear
                         v-if="sistema"
                         indeterminate
@@ -171,7 +166,7 @@
                         dense
                         style="color:#fff !important;"
                       >
-                       Humedad <br> {{hume}}%
+                       Humedad {{humedad}}%
                         <v-progress-linear
                         v-if="sistema"
                         indeterminate
@@ -197,8 +192,8 @@
                         dense
                         style="color:#fff !important;"
                       >
-                         Hora <br>
-                        2:00 pm
+                         Hora
+                        {{hora}}:{{minutos}} pm
                          <v-progress-linear
                          v-if="sistema"
                         indeterminate
@@ -407,5 +402,34 @@ export default {
   to {
     transform: rotate(359deg);
   }
+}
+
+@keyframes otoño{
+    
+    0%{
+        transform: translateX(70px) ;
+    }
+    25%{
+        transform: translateX(70px);
+    }
+    50%{
+        transform: translateX(-70px) rotate(90deg);
+    }
+    75%{
+        transform: translateX(-70px) rotate(90deg);
+    }
+    100%{
+        transform: translateX(70px);
+    }
+   
+    
+}
+
+@keyframes nieve{
+    50%{
+        transform: translateY(-30px);
+    }100%{
+        transform: translateY(0px);
+    }
 }
 </style>

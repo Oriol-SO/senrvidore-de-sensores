@@ -37,6 +37,14 @@
                     <v-switch v-model="led" @click="prenderled()" class="ml-4"  color="#01c4ff"></v-switch>
                 </v-list-item>
 
+                <v-list-item
+                >
+                <v-list-item-title>
+                     <v-icon>mdi-led-on</v-icon> Motor
+                </v-list-item-title>
+                    <v-switch v-model="estado_motor" @click="prender_motor()" class="ml-4"  color="#01c4ff"></v-switch>
+                </v-list-item>
+
             </v-list>
             </v-menu> 
         </v-card-title>
@@ -50,7 +58,7 @@
                             <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#f9f82dfc">mdi-thermometer</v-icon>
                         </v-card-title>
                         <v-card elevation="0" class="transparent d-flex" height="240" >
-                            <strong style="color:#e9701afc" class="color_numero">{{temperatura}}°C</strong>   
+                            <strong style="color:#e9701afc" class="color_numero">{{temp}}°C</strong>   
                         </v-card>
                     </v-card>
                 </v-col>
@@ -99,13 +107,13 @@
                 <v-col cols="12" sm="5">
                     <v-card class="mb-3 card2" >
                         <v-card-title class="colorletra" style="position:relative; width:100%;">
-                            Hora
+                            Hora  {{hor}}
                             <v-icon dark style="position:absolute; right:0;  top:5px" size="70" color="#ef476f">mdi-clock</v-icon>
                         </v-card-title>
                         <v-card elevation="0" class="transparent d-flex" height="140" >
                             <div class="container">
                                 <div class="reloj">
-                                    {{hora}}:{{minutos}} PM
+                                    {{hora}}:{{minutos}} {{hora>=12?'PM':'AM'}}
                                 </div>
                             </div>   
                         </v-card>
@@ -123,11 +131,11 @@
                                     <div v-else-if="estacion==2" class="invierno" style="animation: nieve 2s ease-in-out infinite;">
                                         <v-icon dark style="right:0;  top:5px" size="130" color="#118ab2">mdi-snowflake</v-icon>
                                     </div> 
-                                    <div v-else-if="estacion==3" class="primavera" style="">
+                                    <div v-else-if="estacion==4" class="primavera" style="">
                                         <v-icon dark style="right:0;  top:5px" size="130" color="#ef476f">mdi-flower</v-icon>
                                         
                                     </div>
-                                    <div v-else-if="estacion==4" class="otoño" style="animation: otoño 3.5s ease-in-out infinite;">
+                                    <div v-else-if="estacion==3" class="otoño" style="animation: otoño 3s ease-in-out infinite;">
                                         <v-icon dark style="right:0;  top:5px" size="130" color="#e9701afc">mdi-seed</v-icon>
                                         
                                     </div>
@@ -136,7 +144,14 @@
                              
                             </div>  
                                 <div class="date">
-                                    {{dia}} de  {{mes}} <br>
+                                    <div class="mb-3">
+                                    <v-chip color="#fff76e" small @click="cambiarestacion(1)">
+                                        Verano
+                                    </v-chip>
+                                    <v-chip class="ml-1" color="#118ab2" small @click="cambiarestacion(2)" >Invierno</v-chip>
+                                    <v-chip class="ml-1" color="#e9701afc" small @click="cambiarestacion(3)" >Otoño</v-chip>
+                                    <v-chip class="ml-1" color="#ef476f" small @click="cambiarestacion(4)" >Primavera</v-chip>
+                                    </div>
                                     {{nombreest}}
                                 </div>
                         </v-card>
@@ -153,7 +168,7 @@
                         loading
                        style="color:#fff !important;"
                       >
-                        Temperatura {{temperatura}}°C
+                        Temperatura {{temp}}°C
                         <v-progress-linear
                         v-if="sistema"
                         indeterminate
@@ -179,7 +194,7 @@
                         dense
                      style="color:#fff !important;"
                       >
-                       Con lluvia
+                       {{lluvia?'Con':'Sin'}} lluvia
                         <v-progress-linear
                         v-if="sistema"
                         indeterminate
@@ -192,7 +207,7 @@
                         dense
                         style="color:#fff !important;"
                       >
-                         Hora
+                         Hora <br>
                         {{hora}}:{{minutos}} pm
                          <v-progress-linear
                          v-if="sistema"
@@ -206,7 +221,7 @@
                         dense
                         style="color:#fff !important;"
                       >
-                        Verano
+                        {{nombreest}}
                          <v-progress-linear
                         v-if="sistema"
                         indeterminate
@@ -251,16 +266,39 @@ export default {
             dia: 20,
             mes: "Octubre",
             verano: 1,
-            estacion:4,
+            estacion:1,
             nombreest:'Verano',
-            estado_motor:1,
+            estado_motor:0,
+            tiempo:0,
+           // hume:0,
+            count:0,
+           datos:{
+            humedad:0,
+            temperatura:0,
+            hora:0,
+            estacion:0,
+            lluvia:0,
+
+           }
         }
     },computed:{
         hume(){
-            return Math.round(((this.humedad*100)/4095));
-        }
+            return Math.round((((1300-this.humedad)/1400)*100))
+        },
+        temp(){
+            return Math.round(this.temperatura/100)
+        },
+        hor(){
+            this.obtenerhora();
+            return '';
+        },
     },    
     mounted(){
+
+        let brains = document.createElement('script')
+        brains.setAttribute('src', '//unpkg.com/brain.js')
+        document.head.appendChild(brains)
+
             this.client.on('connect', ()=>{
             console.log('conectado')
             this.client.subscribe('oriolport/01',(err)=> {
@@ -275,28 +313,85 @@ export default {
                     //console.log(message.toString())
                     let js=message.toString();
                     let cadena=JSON.parse(js);
-                    console.log(cadena)
+                    //console.log(cadena)
                     this.humedad=cadena.hume;
-                    this.lluvia=cadena.lluvia;
+                    this.lluvia=cadena.lluvia?0:1;
                     this.temperatura=cadena.temp;
-                    this.estado_motor=1;
+                    this.tiempo=cadena.hora;
+                   // this.estado_motor=1;
+                   // console.log(this.lluvia)
+                    if(this.count==4){
+                        this.count=0;
+                        this.ejecutor();
+                    }
+                    this.count++;
                 }else{
                     this.humedad=0;
                     this.lluvia=0;
                     this.temperatura=0;
                     this.estado_motor=0;
                 }
+
+                //setInterval(this.ejecutor(),5000)
             })
+  
+
     },methods:{
         prenderled(){
             let l=this.led?'1':'0';
-              this.client.publish('oriolport/02', l)
+              this.client.publish('oriolport/02', 'e'+l)
         },
         estado_sistema(){
             let s=this.sistema?'1':'0';
             if(s=='0'){
-              this.client.publish('oriolport/03', s)
+              this.client.publish('oriolport/02', 'm0')
             }
+        },
+     
+        obtenerhora(){
+            this.hora=Math.round(this.tiempo/170);
+            //let hor=Math.round(this.tiempo/24);
+            let rangmin=Math.round(this.tiempo%170);
+            let min=Math.round((rangmin*60)/170)
+            this.minutos=min;
+        }
+        ,
+        prender_motor(){
+            let s=this.estado_motor?'1':'0';
+            this.client.publish('oriolport/02', 'm'+s)
+        },
+        cambiarestacion(es){
+            switch(es){
+                case 1:
+                    this.nombreest='Verano';
+                    this.estacion=1;
+                    break;
+                case 2:
+                    this.nombreest='Invierno';
+                    this.estacion=2;
+                    break;
+                case 3:
+                    this.nombreest='Otoño';
+                    this.estacion=3;
+                    break;
+                case 4:
+                    this.nombreest='Primavera';
+                    this.estacion=4;
+                    break;
+                default :
+                    break;
+            }
+        },
+        ejecutor(){
+                this.datos.humedad=Math.round((((1300-this.humedad)/1400)*100));
+                this.datos.temperatura= Math.round(this.temperatura/100);
+                this.datos.hora=Math.round(this.tiempo/170);
+                this.datos.estacion=this.estacion;
+                this.datos.lluvia=this.lluvia;
+                console.log(this.datos);
+                const net=new brain.NeuralNetwork();
+                return net;
+            
         }
     }
 
@@ -364,6 +459,7 @@ export default {
 .date{
     display: flex;
     font-size: 25px;
+    flex-direction: column;
     color: white;
     font-family: "Open Sans";
 }
